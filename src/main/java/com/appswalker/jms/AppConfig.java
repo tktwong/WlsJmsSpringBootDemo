@@ -16,7 +16,7 @@ import org.springframework.jndi.JndiTemplate;
 @Configuration
 public class AppConfig {
     
-    // Url to access to the queue o topic
+    // Url to access to the queue or topic
     @Value("${jms.providerUrl}")
     private String providerUrl;
     
@@ -24,7 +24,7 @@ public class AppConfig {
     @Value("${jms.connectionFactoryJndiName}")
     private String connectionFactoryJndiName;
     
-    // Name of the queue o topic to extract the message
+    // Name of the queue or topic to extract the message
     @Value("${jms.destinationJndiName}")
     private String destinationJndiName;
     
