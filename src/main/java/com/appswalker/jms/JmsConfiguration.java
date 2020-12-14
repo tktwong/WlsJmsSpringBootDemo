@@ -15,9 +15,7 @@ import org.springframework.jndi.JndiTemplate;
 @Configuration
 public class JmsConfiguration{
 
-//    private String userName ="weblogic";
     private String connectionFactory ="jms/DpmsServiceTcf";
-//    private String password ="xxxxxxxx";
     private String topic ="jms/DpmsServiceTopic";
     private String url ="t3://localhost:7001";
 
@@ -29,8 +27,6 @@ public class JmsConfiguration{
         Properties props = new Properties();
         props.setProperty("java.naming.factory.initial","weblogic.jndi.WLInitialContextFactory");
         props.setProperty("java.naming.provider.url", url);
-//        props.setProperty("java.naming.security.principal",userName);
-//        props.setProperty("java.naming.security.credentials",password);
         JndiTemplate jmsJndiTemplate = new JndiTemplate();
         jmsJndiTemplate.setEnvironment(props);
         return jmsJndiTemplate;

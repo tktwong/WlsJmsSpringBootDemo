@@ -15,7 +15,7 @@ public class DpmsMessageListener implements MessageListener{
         if (message instanceof TextMessage) {
             try {
                 String msg = ((TextMessage)message).getText();
-                System.out.println("ok--"+msg);
+                System.out.println(msg);
                 //JSONObject.parseObject("",clazz);
             } catch (JMSException e) {
                 throw new RuntimeException(e);
