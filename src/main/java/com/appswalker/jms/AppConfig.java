@@ -35,7 +35,7 @@ public class AppConfig {
     
     @Autowired
     @Bean
-    public DefaultJmsListenerContainerFactory dpmsTestServiceQcf(ConnectionFactory connectionFactory, DestinationResolver destination) {
+    public DefaultJmsListenerContainerFactory dpmsServiceQcf(ConnectionFactory connectionFactory, DestinationResolver destination) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setDestinationResolver(destination);
