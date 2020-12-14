@@ -2,11 +2,21 @@
 
 ## Connection Factory
 ```
-dpms_testService_qcf
-jms/DpmsTestServiceQcf
+dpms_service_qcf
+jms/DpmsServiceQcf
 ```
 ## Destributed Queue
 ```
-dpms_testService_que
-jms/DpmsTestServiceQue
+dpms_service_que
+jms/DpmsServiceQue
+```
+## Connection Factory
+```
+dpms_service_tcf
+jms/DpmsServiceTcf
+```
+## Distributed Topic
+```
+dpms_service_topic
+jms/DpmsServiceTopic
 ```
