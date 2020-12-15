@@ -14,7 +14,7 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.jndi.JndiTemplate;
 
 @Configuration
-public class AppConfig {
+public class QueueConfig {
     
     // Url to access to the queue or topic
     @Value("${jms.providerUrl}")

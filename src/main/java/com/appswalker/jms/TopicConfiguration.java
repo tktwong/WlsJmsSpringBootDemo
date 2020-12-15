@@ -13,7 +13,7 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.jndi.JndiTemplate;
 
 @Configuration
-public class JmsConfiguration{
+public class TopicConfiguration {
 
     private String connectionFactory ="jms/DpmsServiceTcf";
     private String topic ="jms/DpmsServiceTopic";
