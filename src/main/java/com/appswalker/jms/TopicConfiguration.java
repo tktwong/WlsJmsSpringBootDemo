@@ -22,29 +22,37 @@ public class TopicConfiguration {
     @Autowired
     private DpmsMessageListener dpmsMessageListener;
 
-    @Bean(name ="weblogicJms")
-    public JndiTemplate weblogicJms(){
-        Properties props = new Properties();
-        props.setProperty("java.naming.factory.initial","weblogic.jndi.WLInitialContextFactory");
-        props.setProperty("java.naming.provider.url", url);
-        JndiTemplate jmsJndiTemplate = new JndiTemplate();
-        jmsJndiTemplate.setEnvironment(props);
-        return jmsJndiTemplate;
+    @Autowired
+    @Bean
+    public JmsTemplate dpmsTopicTemplate() {
+        JmsTemplate jmsTemplate = new JmsTemplate();
+        jmsTemplate.setConnectionFactory((ConnectionFactory) topicConnFactory().getObject());
+        jmsTemplate.setDefaultDestination((Destination) topicDestination().getObject());
+        jmsTemplate.setPubSubDomain(true);
+        jmsTemplate.setExplicitQosEnabled(true);
+        return jmsTemplate;
     }
 
-    @Bean(name ="jmsConnectionFactory")
-    public JndiObjectFactoryBean jmsConnectionFactory(){
+    private JndiTemplate wlsProvider(){
+        Properties env = new Properties();
+        env.setProperty("java.naming.factory.initial","weblogic.jndi.WLInitialContextFactory");
+        env.setProperty("java.naming.provider.url", url);
+        return new JndiTemplate(env);
+    }
+
+    @Bean
+    public JndiObjectFactoryBean topicConnFactory() {
         JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();
         jndiObjectFactoryBean.setJndiName(connectionFactory);
-        jndiObjectFactoryBean.setJndiTemplate(weblogicJms());
+        jndiObjectFactoryBean.setJndiTemplate(wlsProvider());
         return jndiObjectFactoryBean;
     }
 
-    @Bean(name ="jmsDestination")
-    public JndiObjectFactoryBean jmsDestination(){
+    @Bean
+    public JndiObjectFactoryBean topicDestination(){
         JndiObjectFactoryBean jmsDestination =new JndiObjectFactoryBean();
         jmsDestination.setJndiName(topic);
-        jmsDestination.setJndiTemplate(weblogicJms());
+        jmsDestination.setJndiTemplate(wlsProvider());
         return jmsDestination;
     }
 
@@ -52,24 +60,13 @@ public class TopicConfiguration {
     @ConditionalOnMissingBean
     public DefaultMessageListenerContainer listenerTopic(){
         DefaultMessageListenerContainer listener = new DefaultMessageListenerContainer();
-        listener.setConnectionFactory((ConnectionFactory) jmsConnectionFactory().getObject());
-        listener.setDestination((Destination) jmsDestination().getObject());
+        listener.setConnectionFactory((ConnectionFactory) topicConnFactory().getObject());
+        listener.setDestination((Destination) topicDestination().getObject());
         listener.setAutoStartup(true);
         listener.setPubSubDomain(true);
         listener.setMessageListener(dpmsMessageListener);
         return listener;
     }
-
-    @Bean
-    public JmsTemplate dpmsTopicTemplate() {
-        JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory((ConnectionFactory) jmsConnectionFactory().getObject());
-        jmsTemplate.setDefaultDestination((Destination) jmsDestination().getObject());
-        jmsTemplate.setPubSubDomain(true);
-        jmsTemplate.setExplicitQosEnabled(true);
-        return jmsTemplate;
-    }
-
 }
 
 

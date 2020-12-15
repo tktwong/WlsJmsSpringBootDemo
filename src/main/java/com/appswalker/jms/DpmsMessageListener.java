@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DpmsMessageListener implements MessageListener{
-
     @Override
     public void onMessage(Message message) {
         if (message instanceof TextMessage) {
@@ -20,15 +19,11 @@ public class DpmsMessageListener implements MessageListener{
             } catch (JMSException e) {
                 throw new RuntimeException(e);
             }
-
         } else {
             throw new IllegalArgumentException(
                     "Message must be of type TestMessage");
         }
     }
-
-
-
 }
 
 

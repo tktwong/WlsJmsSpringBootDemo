@@ -19,34 +19,26 @@ import org.springframework.jndi.JndiTemplate;
 public class QueueConfig {
     
     // Url to access to the queue or topic
-    @Value("${jms.providerUrl}")
-    private String providerUrl;
-    
+    private String providerUrl = "t3://localhost:7001";
     // Number of consumers in the application
-    @Value("${jms.connectionFactoryJndiName}")
-    private String connectionFactoryJndiName;
-    
+    private String connectionFactoryJndiName = "jms/DpmsServiceQcf";
     // Name of the queue or topic to extract the message
-    @Value("${jms.destinationJndiName}")
-    private String destinationJndiName;
-    
-    // Number of consumers in the application
+    private String destinationJndiName = "jms/DpmsServiceQue";
     @Value("${jms.concurrentConsumers}")
     private String concurrentConsumers;
     
-    
     @Autowired
     @Bean
-    public DefaultJmsListenerContainerFactory dpmsServiceQcf(ConnectionFactory connectionFactory, DestinationResolver destination) {
+    public DefaultJmsListenerContainerFactory dpmsServiceQcf(ConnectionFactory queueConnFactory,
+                                                             DestinationResolver queueDestResolver) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setDestinationResolver(destination);
+        factory.setConnectionFactory(queueConnFactory);
+        factory.setDestinationResolver(queueDestResolver);
         factory.setConcurrency(concurrentConsumers);
         return factory;
     }
 
-    @Bean
-    public JndiTemplate provider() {
+    private JndiTemplate wlsProvider() {
         Properties env = new Properties();
         env.put("java.naming.factory.initial", "weblogic.jndi.WLInitialContextFactory");
         env.put("java.naming.provider.url", providerUrl);
@@ -55,9 +47,9 @@ public class QueueConfig {
     
     @Autowired
     @Bean
-    public JndiObjectFactoryBean connectionFactory(JndiTemplate provider){
+    public JndiObjectFactoryBean queueConnFactory(){
         JndiObjectFactoryBean factory = new JndiObjectFactoryBean();
-        factory.setJndiTemplate(provider);
+        factory.setJndiTemplate(wlsProvider());
         factory.setJndiName(connectionFactoryJndiName);
         factory.setProxyInterface(ConnectionFactory.class);
         return factory;
@@ -65,17 +57,17 @@ public class QueueConfig {
     
     @Autowired
     @Bean
-    public JndiDestinationResolver jmsDestinationResolver(JndiTemplate provider){
+    public JndiDestinationResolver queueDestResolver(){
         JndiDestinationResolver destResolver = new JndiDestinationResolver();
-        destResolver.setJndiTemplate(provider);
+        destResolver.setJndiTemplate(wlsProvider());
         return destResolver;
     }
     
     @Autowired
     @Bean
-    public JndiObjectFactoryBean destination(JndiTemplate provider) {
+    public JndiObjectFactoryBean queueDestination() {
         JndiObjectFactoryBean dest = new JndiObjectFactoryBean();
-        dest.setJndiTemplate(provider);
+        dest.setJndiTemplate(wlsProvider());
         dest.setJndiName(destinationJndiName);
         return dest;
     }
@@ -83,8 +75,8 @@ public class QueueConfig {
     @Bean
     public JmsTemplate dpmsQueTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory((ConnectionFactory) connectionFactory(provider()).getObject());
-        jmsTemplate.setDefaultDestination((Destination) destination(provider()).getObject());
+        jmsTemplate.setConnectionFactory((ConnectionFactory) queueConnFactory().getObject());
+        jmsTemplate.setDefaultDestination((Destination) queueDestination().getObject());
         return jmsTemplate;
     }
 }
