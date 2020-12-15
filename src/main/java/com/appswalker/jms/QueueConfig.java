@@ -2,12 +2,14 @@ package com.appswalker.jms;
 
 import java.util.Properties;
 import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.JndiDestinationResolver;
 import org.springframework.jndi.JndiObjectFactoryBean;
@@ -53,7 +55,7 @@ public class QueueConfig {
     
     @Autowired
     @Bean
-    public JndiObjectFactoryBean connectionFactory(JndiTemplate provider){  
+    public JndiObjectFactoryBean connectionFactory(JndiTemplate provider){
         JndiObjectFactoryBean factory = new JndiObjectFactoryBean();
         factory.setJndiTemplate(provider);
         factory.setJndiName(connectionFactoryJndiName);
@@ -76,5 +78,13 @@ public class QueueConfig {
         dest.setJndiTemplate(provider);
         dest.setJndiName(destinationJndiName);
         return dest;
+    }
+
+    @Bean
+    public JmsTemplate dpmsQueTemplate() {
+        JmsTemplate jmsTemplate = new JmsTemplate();
+        jmsTemplate.setConnectionFactory((ConnectionFactory) connectionFactory(provider()).getObject());
+        jmsTemplate.setDefaultDestination((Destination) destination(provider()).getObject());
+        return jmsTemplate;
     }
 }

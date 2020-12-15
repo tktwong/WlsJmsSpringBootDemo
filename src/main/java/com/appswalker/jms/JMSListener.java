@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 public class JMSListener {
     @JmsListener(containerFactory = "dpmsServiceQcf", destination = "${jms.destinationJndiName}")
     public void receiveMessage(String msg) {
-        System.out.println(String.format("emmit to frontend: %s", msg));
+        System.out.println(String.format("Emit to frontend from queue: %s", msg));
     }
 }

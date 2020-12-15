@@ -18,10 +18,14 @@ class JmsController {
     @Autowired
     private JmsTemplate dpmsTopicTemplate;
 
+    @Autowired
+    private JmsTemplate dpmsQueTemplate;
+
     @RequestMapping(value ="/sendMsg", method = RequestMethod.POST)
     @ResponseBody
     public String sendMessage(HttpServletRequest req, HttpServletResponse resp){
-        dpmsTopicTemplate.convertAndSend("hello world   " +System.currentTimeMillis() );
+        dpmsTopicTemplate.convertAndSend("hello world from topic at " +System.currentTimeMillis());
+        dpmsQueTemplate.convertAndSend("hello world from queue at " +System.currentTimeMillis());
         return "OK";
     }
 }
