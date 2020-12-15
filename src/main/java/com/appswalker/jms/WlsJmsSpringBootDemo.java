@@ -7,8 +7,8 @@ import org.springframework.jms.annotation.EnableJms;
 
 @SpringBootApplication(exclude = JmxAutoConfiguration.class)
 @EnableJms
-public class JmsreaderApplication {
+public class WlsJmsSpringBootDemo {
 	public static void main(String[] args) {
-		SpringApplication.run(JmsreaderApplication.class, args);
+		SpringApplication.run(WlsJmsSpringBootDemo.class, args);
 	}
 }
