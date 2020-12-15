@@ -3,6 +3,8 @@ package com.appswalker.jms;
 import java.util.Properties;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
+import javax.naming.Context;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -35,8 +37,8 @@ public class TopicConfiguration {
 
     private JndiTemplate wlsProvider(){
         Properties env = new Properties();
-        env.setProperty("java.naming.factory.initial","weblogic.jndi.WLInitialContextFactory");
-        env.setProperty("java.naming.provider.url", url);
+        env.setProperty(Context.INITIAL_CONTEXT_FACTORY,"weblogic.jndi.WLInitialContextFactory");
+        env.setProperty(Context.PROVIDER_URL, url);
         return new JndiTemplate(env);
     }
 

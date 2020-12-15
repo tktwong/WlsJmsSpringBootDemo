@@ -3,6 +3,7 @@ package com.appswalker.jms;
 import java.util.Properties;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
+import javax.naming.Context;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,8 +41,8 @@ public class QueueConfig {
 
     private JndiTemplate wlsProvider() {
         Properties env = new Properties();
-        env.put("java.naming.factory.initial", "weblogic.jndi.WLInitialContextFactory");
-        env.put("java.naming.provider.url", providerUrl);
+        env.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
+        env.put(Context.PROVIDER_URL, providerUrl);
         return new JndiTemplate(env);
     }
     
