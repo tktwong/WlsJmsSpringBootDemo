@@ -24,14 +24,16 @@ class JmsController {
     @RequestMapping(value ="/sendMsg", method = RequestMethod.POST)
     @ResponseBody
     public String sendMessage(HttpServletRequest req, HttpServletResponse resp){
+        User user = User.builder().gender("Male").name("Parken").password("password").build();
         dpmsTopicTemplate.convertAndSend("hello world from topic at " +System.currentTimeMillis());
+        dpmsTopicTemplate.convertAndSend(user);
         dpmsQueTemplate.convertAndSend("hello world from queue at " +System.currentTimeMillis());
         dpmsQueTemplate.convertAndSend("hello world from queue at " +System.currentTimeMillis(), m -> {
             m.setStringProperty("classType", "text");
             return m;
         });
         dpmsQueTemplate.convertAndSend(
-                User.builder().gender("Male").name("Parken").password("password").build(), m -> {
+                user, m -> {
             m.setStringProperty("classType", "user");
             return m;
         });

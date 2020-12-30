@@ -12,6 +12,7 @@ public class DpmsMessageListener implements MessageListener{
     @Override
     public void onMessage(Message message) {
         if (message instanceof TextMessage) {
+            System.out.println(message);
             try {
                 String msg = ((TextMessage)message).getText();
                 System.out.println(String.format("Consume message from topic (text): %s",msg));

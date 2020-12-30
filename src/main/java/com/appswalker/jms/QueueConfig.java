@@ -22,13 +22,15 @@ import org.springframework.jndi.JndiTemplate;
 public class QueueConfig {
     
     // Url to access to the queue or topic
-    private String providerUrl = "t3://localhost:7001";
+    @Value("${jms.providerUrl}")
+    private String providerUrl;
     // Number of consumers in the application
+    @Value("${jms.concurrentConsumers}")
+    private String concurrentConsumers;
+    // Name of the connection factory
     private String connectionFactoryJndiName = "jms/DpmsServiceQcf";
     // Name of the queue or topic to extract the message
     private String destinationJndiName = "jms/DpmsServiceQue";
-    @Value("${jms.concurrentConsumers}")
-    private String concurrentConsumers;
 
     @Autowired
     private MessageConverter jacksonJmsMessageConverter;

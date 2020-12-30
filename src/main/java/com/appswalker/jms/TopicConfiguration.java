@@ -6,6 +6,7 @@ import javax.jms.Destination;
 import javax.naming.Context;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,9 @@ public class TopicConfiguration {
 
     private String connectionFactory ="jms/DpmsServiceTcf";
     private String topic ="jms/DpmsServiceTopic";
-    private String url ="t3://localhost:7001";
+    // Url to access to the queue or topic
+    @Value("${jms.providerUrl}")
+    private String url;
 
     @Autowired
     private MessageConverter jacksonJmsMessageConverter;
