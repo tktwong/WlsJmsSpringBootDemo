@@ -24,7 +24,6 @@ public class TopicConfiguration {
     @Autowired
     private DpmsMessageListener dpmsMessageListener;
 
-    @Autowired
     @Bean
     public JmsTemplate dpmsTopicTemplate() {
         JmsTemplate jmsTemplate = new JmsTemplate();

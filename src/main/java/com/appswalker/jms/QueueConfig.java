@@ -28,7 +28,6 @@ public class QueueConfig {
     @Value("${jms.concurrentConsumers}")
     private String concurrentConsumers;
     
-    @Autowired
     @Bean
     public DefaultJmsListenerContainerFactory dpmsServiceQcf(ConnectionFactory queueConnFactory,
                                                              DestinationResolver queueDestResolver) {
@@ -46,7 +45,6 @@ public class QueueConfig {
         return new JndiTemplate(env);
     }
     
-    @Autowired
     @Bean
     public JndiObjectFactoryBean queueConnFactory(){
         JndiObjectFactoryBean factory = new JndiObjectFactoryBean();
@@ -56,7 +54,6 @@ public class QueueConfig {
         return factory;
     }
     
-    @Autowired
     @Bean
     public JndiDestinationResolver queueDestResolver(){
         JndiDestinationResolver destResolver = new JndiDestinationResolver();
@@ -64,7 +61,6 @@ public class QueueConfig {
         return destResolver;
     }
     
-    @Autowired
     @Bean
     public JndiObjectFactoryBean queueDestination() {
         JndiObjectFactoryBean dest = new JndiObjectFactoryBean();
