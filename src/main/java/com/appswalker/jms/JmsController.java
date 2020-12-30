@@ -26,6 +26,15 @@ class JmsController {
     public String sendMessage(HttpServletRequest req, HttpServletResponse resp){
         dpmsTopicTemplate.convertAndSend("hello world from topic at " +System.currentTimeMillis());
         dpmsQueTemplate.convertAndSend("hello world from queue at " +System.currentTimeMillis());
+        dpmsQueTemplate.convertAndSend("hello world from queue at " +System.currentTimeMillis(), m -> {
+            m.setStringProperty("classType", "text");
+            return m;
+        });
+        dpmsQueTemplate.convertAndSend(
+                User.builder().gender("Male").name("Parken").password("password").build(), m -> {
+            m.setStringProperty("classType", "user");
+            return m;
+        });
         return "OK";
     }
 }

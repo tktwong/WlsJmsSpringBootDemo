@@ -5,12 +5,14 @@ import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.naming.Context;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.jms.support.destination.JndiDestinationResolver;
 import org.springframework.jndi.JndiObjectFactoryBean;
@@ -27,6 +29,9 @@ public class QueueConfig {
     private String destinationJndiName = "jms/DpmsServiceQue";
     @Value("${jms.concurrentConsumers}")
     private String concurrentConsumers;
+
+    @Autowired
+    private MessageConverter jacksonJmsMessageConverter;
     
     @Bean
     public DefaultJmsListenerContainerFactory dpmsServiceQcf(ConnectionFactory queueConnFactory,
@@ -35,6 +40,7 @@ public class QueueConfig {
         factory.setConnectionFactory(queueConnFactory);
         factory.setDestinationResolver(queueDestResolver);
         factory.setConcurrency(concurrentConsumers);
+        factory.setMessageConverter(jacksonJmsMessageConverter);
         return factory;
     }
 
@@ -74,6 +80,7 @@ public class QueueConfig {
         JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setConnectionFactory((ConnectionFactory) queueConnFactory().getObject());
         jmsTemplate.setDefaultDestination((Destination) queueDestination().getObject());
+        jmsTemplate.setMessageConverter(jacksonJmsMessageConverter);
         return jmsTemplate;
     }
 }

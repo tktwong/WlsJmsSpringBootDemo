@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.listener.DefaultMessageListenerContainer;
+import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.jndi.JndiTemplate;
 
@@ -22,6 +23,9 @@ public class TopicConfiguration {
     private String url ="t3://localhost:7001";
 
     @Autowired
+    private MessageConverter jacksonJmsMessageConverter;
+
+    @Autowired
     private DpmsMessageListener dpmsMessageListener;
 
     @Bean
@@ -31,6 +35,7 @@ public class TopicConfiguration {
         jmsTemplate.setDefaultDestination((Destination) topicDestination().getObject());
         jmsTemplate.setPubSubDomain(true);
         jmsTemplate.setExplicitQosEnabled(true);
+        jmsTemplate.setMessageConverter(jacksonJmsMessageConverter);
         return jmsTemplate;
     }
 
@@ -66,6 +71,7 @@ public class TopicConfiguration {
         listener.setAutoStartup(true);
         listener.setPubSubDomain(true);
         listener.setMessageListener(dpmsMessageListener);
+        listener.setMessageConverter(jacksonJmsMessageConverter);
         return listener;
     }
 }

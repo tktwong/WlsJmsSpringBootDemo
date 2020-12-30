@@ -14,7 +14,7 @@ public class DpmsMessageListener implements MessageListener{
         if (message instanceof TextMessage) {
             try {
                 String msg = ((TextMessage)message).getText();
-                System.out.println(String.format("Emit to frontend: %s",msg));
+                System.out.println(String.format("Consume message from topic (text): %s",msg));
                 //JSONObject.parseObject("",clazz);
             } catch (JMSException e) {
                 throw new RuntimeException(e);
