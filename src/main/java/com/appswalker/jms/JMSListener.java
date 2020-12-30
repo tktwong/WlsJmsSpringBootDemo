@@ -12,8 +12,8 @@ public class JMSListener {
     }
 
     @JmsListener(containerFactory = "dpmsServiceQcf", destination = "jms/DpmsServiceQue")
-    public void receiveAnyMessage(String msg) {
-        System.out.println(String.format("Consume message from queue (Any String): %s", msg));
+    public void receiveAnyMessage(Object msg) {
+        System.out.println(String.format("Consume message from queue (Any Message): %s", msg.toString()));
     }
 
     @JmsListener(containerFactory = "dpmsServiceQcf", destination = "jms/DpmsServiceQue", selector = "classType = 'text'")
