@@ -1,4 +1,4 @@
-package com.appswalker.jms;
+package com.appswalker.jms.queue;
 
 import java.util.Properties;
 import javax.jms.ConnectionFactory;

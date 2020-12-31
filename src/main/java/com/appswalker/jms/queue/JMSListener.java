@@ -1,5 +1,6 @@
-package com.appswalker.jms;
+package com.appswalker.jms.queue;
 
+import com.appswalker.jms.model.User;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 

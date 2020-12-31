@@ -1,4 +1,4 @@
-package com.appswalker.jms;
+package com.appswalker.jms.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

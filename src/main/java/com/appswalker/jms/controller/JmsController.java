@@ -1,7 +1,7 @@
-package com.appswalker.jms;
+package com.appswalker.jms.controller;
 
+import com.appswalker.jms.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsTemplate;
 
 import org.springframework.stereotype.Controller;
