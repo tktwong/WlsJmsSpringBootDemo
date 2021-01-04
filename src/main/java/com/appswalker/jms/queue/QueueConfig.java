@@ -46,42 +46,43 @@ public class QueueConfig {
         return factory;
     }
 
-    private JndiTemplate wlsProvider() {
+    @Bean
+    public JndiTemplate wlsProvider() {
         Properties env = new Properties();
         env.put(Context.INITIAL_CONTEXT_FACTORY, "weblogic.jndi.WLInitialContextFactory");
-        env.put(Context.PROVIDER_URL, providerUrl);
+        env.put(Context.PROVIDER_URL, "t3://localhost:7001");
         return new JndiTemplate(env);
     }
     
     @Bean
-    public JndiObjectFactoryBean queueConnFactory(){
+    public JndiObjectFactoryBean queueConnFactory(JndiTemplate wlsProvider){
         JndiObjectFactoryBean factory = new JndiObjectFactoryBean();
-        factory.setJndiTemplate(wlsProvider());
+        factory.setJndiTemplate(wlsProvider);
         factory.setJndiName(connectionFactoryJndiName);
         factory.setProxyInterface(ConnectionFactory.class);
         return factory;
     }
     
     @Bean
-    public JndiDestinationResolver queueDestResolver(){
+    public JndiDestinationResolver queueDestResolver(JndiTemplate wlsProvider){
         JndiDestinationResolver destResolver = new JndiDestinationResolver();
-        destResolver.setJndiTemplate(wlsProvider());
+        destResolver.setJndiTemplate(wlsProvider);
         return destResolver;
     }
     
     @Bean
-    public JndiObjectFactoryBean queueDestination() {
+    public JndiObjectFactoryBean queueDestination(JndiTemplate wlsProvider) {
         JndiObjectFactoryBean dest = new JndiObjectFactoryBean();
-        dest.setJndiTemplate(wlsProvider());
+        dest.setJndiTemplate(wlsProvider);
         dest.setJndiName(destinationJndiName);
         return dest;
     }
 
     @Bean
-    public JmsTemplate dpmsQueTemplate() {
+    public JmsTemplate dpmsQueTemplate(JndiTemplate wlsProvider) {
         JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory((ConnectionFactory) queueConnFactory().getObject());
-        jmsTemplate.setDefaultDestination((Destination) queueDestination().getObject());
+        jmsTemplate.setConnectionFactory((ConnectionFactory) queueConnFactory(wlsProvider).getObject());
+        jmsTemplate.setDefaultDestination((Destination) queueDestination(wlsProvider).getObject());
         jmsTemplate.setMessageConverter(jacksonJmsMessageConverter);
         return jmsTemplate;
     }

@@ -9,6 +9,10 @@ import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
+import org.springframework.jndi.JndiTemplate;
+
+import javax.naming.Context;
+import java.util.Properties;
 
 @SpringBootApplication(exclude = JmxAutoConfiguration.class)
 @EnableJms
